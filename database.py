@@ -6,16 +6,18 @@ class DataBase():
     username = 'hack'
     password = 'Password23'
     table_name = 'dbo.PRODUTO'
+    connection = None
 
     def __init__(self) -> None:
-        self.connection = connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+self.server+';DATABASE='+self.database+';UID='+self.username+';PWD='+self.password)
+        self.connection = connect('DRIVER={SQL SERVER};SERVER='+self.server+';DATABASE='+self.database+';UID='+self.username+';PWD='+self.password, timeout=5)
         self.cursor = self.connection.cursor()
 
     def __enter__(self):
         return self
 
     def __del__(self) -> None:
-        self.connection.close()
+        if self.connection:
+            self.connection.close()
 
     def __exit__(self, exc_type, exc_value, traceback):
         del self
@@ -71,49 +73,3 @@ class DataBase():
         query = f'SELECT * FROM {self.table_name}'
         self.cursor.execute(query)
         return self.cursor.fetchall()
-
-class Produto():
-    def __init__(self, id:int, nome:str, taxa_de_juros:float, prazo_minimo:int, prazo_maximo:int, valor_minimo:float, valor_maximo:float) -> None:
-        self.id = id
-        self.nome = nome
-        self.taxa_de_juros = taxa_de_juros
-        self.prazo_minimo = prazo_minimo
-        self.prazo_maximo = prazo_maximo
-        self.valor_minimo = valor_minimo
-        self.valor_maximo = valor_maximo
-
-    def validar_simulacao(self, valor_desejado:float, prazo:int) -> bool:
-        if self.valor_maximo is not None and valor_desejado > self.valor_maximo:
-            return False
-        if self.valor_minimo is not None and valor_desejado < self.valor_minimo:
-            return False
-        if self.prazo_maximo is not None and valor_desejado > self.prazo_maximo:
-            return False
-        if self.prazo_minimo is not None and valor_desejado < self.prazo_minimo:
-            return False
-        return True
-
-    def __str__(self) -> str:
-        return f'{self.nome} | Taxa: {self.taxa_de_juros} | Prazo(min-max): {self.prazo_maximo}-{self.prazo_minimo} | Valor(min-max): {self.valor_maximo}-{self.valor_minimo}'
-
-class Lista_Produtos(list):
-    def __init__(self) -> None:
-        return super().__init__()
-
-    def carregar_produtos_da_db(self):
-        self.clear()
-        with DataBase() as db:
-            rows = db.select_all()
-        for row in rows:
-            self.append(Produto(*row))
-
-    def __str__(self) -> str:
-        txt = ''
-        for i in [f'{i} - {produto}\n' for i, produto in enumerate(self)]:
-            txt += i
-        return txt
-
-if __name__ == '__main__':
-    lista = Lista_Produtos()
-    lista.carregar_produtos_da_db()
-    print(lista)

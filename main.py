@@ -1,72 +1,31 @@
 from fastapi import FastAPI, responses
-from pydantic import BaseModel
-from typing import List
+
+from models import EntradaSimulacao, RetornoSimulacao, Parcela, ResultadoSimulacao, Erro
+from _produtos import Lista_Produtos
+
+from _calculo_price import simular_sistema_price as price
+from _calculo_sac import simular_sistema_sac as sac
 
 app = FastAPI()
 
-class Input(BaseModel):
-    valorDesejado: float
-    prazo: int
-
-class Parcelas(BaseModel):
-    numero: int
-    valorAmortizacao: float
-    valorJuros: float
-    valorPrestacao: float
-
-class Simulacao(BaseModel):
-    tipo: str
-    parcelas: List[Parcelas]
-
-class Output(BaseModel):
-    codigoProduto: int
-    descricaoProduto: str
-    taxaJuros: float
-    resultadoSimulacao: List[Simulacao]
+lista_produtos = Lista_Produtos()
+lista_produtos.atualizar_periodicamente(5)
 
 @app.get("/")
 async def root():
     return responses.RedirectResponse(url="/docs")
 
 @app.post("/")
-async def simular_emprestimo(input_data: Input) -> Output:
-    valor_desejado = input_data.valorDesejado
-    prazo = input_data.prazo
-    
-    # sua lógica para calcular a simulação aqui
-    
-    output = Output(
-        codigoProduto=1,
-        descricaoProduto="Produto 1",
-        taxaJuros=0.0179,
-        resultadoSimulacao=[
-            Simulacao(
-                tipo="SAC",
-                parcelas=[
-                    Parcelas(
-                        numero=1,
-                        valorAmortizacao=180.00,
-                        valorJuros=16.11,
-                        valorPrestacao=196.11
-                    ),
-                    # ...
-                ]
-            ),
-            Simulacao(
-                tipo="PRICE",
-                parcelas=[
-                    Parcelas(
-                        numero=1,
-                        valorAmortizacao=173.67,
-                        valorJuros=16.11,
-                        valorPrestacao=189.78
-                    ),
-                    # ...
-                ]
-            )
-        ]
-    )
+async def simular_emprestimo(input:EntradaSimulacao):
+    produto = lista_produtos.retorna_produto_enquadrado(input)
+    if produto is None:
+        return Erro(Codigo=400, Mensagem='Não há produtos disponiveis para os parâmetros informados')
 
+    resultado_simulacao = []
+    resultado_simulacao.append(price(input.valorDesejado, input.prazo, produto.taxa_de_juros))
+    resultado_simulacao.append(sac(input.valorDesejado, input.prazo, produto.taxa_de_juros))
+
+    output = RetornoSimulacao(codigoProduto=produto.id, descricaoProduto=produto.nome, taxaJuros=produto.taxa_de_juros, resultadoSimulacao=resultado_simulacao)
     return output
 
 if __name__ == "__main__":

@@ -1,0 +1,34 @@
+Autor: Bruno Mauricio Nyland
+Matricula: c115181-8
+
+Tecnologias Favoritas: 
+- Python
+- C++ (básico)
+- Selenium (automatizaзгo de navegador)
+- requests (protocolo HTTP)
+- PyQt e PySide (Interface de usuбrio para Python e C++)
+- SQL (Mysql e Sqlite)
+- Json
+- Django (estudando)
+- HTML e CSS (bбsico)
+- LUA (bбsico)
+- PHP (bбsico)
+- FreeBSD (intermediбrio)
+
+Projetos relevantes nos quais participei:
+Já administrei (pelo menos 6) servidores privados de metin2 (que é um jogo MORPG) onde administrava e dava manutenção 
+em servidores FreeBSDs, nas databases (Mysql5.5 até Mysql8.0), nos sites, inclusive programava sistemas para o jogo
+em C++, python e Lua. Nesse processo obtive bastante experiencia em administração de servidores FreeBSD, Firewalls (pf, 
+ipfw), proteção básica contra ataques online, DDoS, injeção SQL, e também em programação python e C++
+
+Me aprofundei em Python, e fiz alguns sistemas para ajudar os colegas na Caixa, entre eles:
+1- Aplicativo do Penhor (funcionando/em desenvolvimento) busca os contratos ativos de penhor e envia email/whatsapp 
+   de cobrança e aviso de licitação, verifica se tem licitação ativa e gera o arquivo pdf para impressão contendo as
+   informações do leilão, calcula digito dos contratos e gera o código de barras para impressão, entre outras funções 
+   em desenvolvimento
+2- Aplicativo que lê um arquivo.xlxs e pega os CPFs e separa por Gerente, consultando o relacionamento.Caixa
+3- Aplicativo portabilidade INSS, que lia o pdf do extrato de consignados do MeuINSS e preenchia o formulario de 
+   portabilidade do INSS calculando todos os dados necessários
+4- Aplicativo para baixar o relatorio de saldos das contas, e buscar os saldos e CPFs das contas pelo depositos.caixa
+5- Aplicativo para ler os relatorios de credito salario dos ultimos 60 dias e gerar um relatorio de todos os funcionarios
+   da prefeitura de Ponta Porã e atualizar as rendas no cadastro.caixa

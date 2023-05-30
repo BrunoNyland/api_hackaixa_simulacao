@@ -2,7 +2,7 @@ from database import DataBase
 from typing import List
 from models import EntradaSimulacao
 from pyodbc import OperationalError
-import threading
+from threading import Timer
 
 class Produto():
     def __init__(self, id:int, nome:str, taxa_de_juros:float, prazo_minimo:int, prazo_maximo:int, valor_minimo:float, valor_maximo:float) -> None:
@@ -29,7 +29,7 @@ class Produto():
         return f'{self.nome} | Taxa: {self.taxa_de_juros} | Prazo(min-max): {self.prazo_minimo}-{self.prazo_maximo} | Valor(min-max): {self.valor_minimo}-{self.valor_maximo}'
 
 class Lista_Produtos(List[Produto]):
-    copia = []
+    copia:List[Produto] = []
 
     def __init__(self) -> None:
         super().__init__()
@@ -46,6 +46,7 @@ class Lista_Produtos(List[Produto]):
             with DataBase() as db:
                 rows = db.select_all()
         except OperationalError as e:
+            print(e)
             self.leitura_disponivel = True
             return
 
@@ -62,7 +63,7 @@ class Lista_Produtos(List[Produto]):
                     return produto
             return None
 
-        for produto in self.copy:
+        for produto in self.copia:
             if produto.validar_simulacao(simulacao.valorDesejado, simulacao.prazo):
                 return produto
         return None
@@ -70,11 +71,11 @@ class Lista_Produtos(List[Produto]):
     def atualizar_periodicamente(self, intervalo_minutos:int):
         self.leitura_disponivel = False
         self.carregar_produtos_da_db()
-        # print(self)
-        self.timer = threading.Timer(intervalo_minutos * 60, self.atualizar_periodicamente, args=[intervalo_minutos])
+        print(self)
+        self.timer = Timer(intervalo_minutos * 60, self.atualizar_periodicamente, args=[intervalo_minutos])
         self.timer.start()
 
-    def parar_atualizacao(self):
+    def parar(self):
         if hasattr(self, 'timer'):
             print('Parando consultas na database...')
             self.timer.cancel()
@@ -82,3 +83,4 @@ class Lista_Produtos(List[Produto]):
 if __name__ == '__main__':
     lista = Lista_Produtos()
     lista.atualizar_periodicamente(1)
+    lista.parar()

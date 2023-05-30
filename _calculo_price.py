@@ -17,3 +17,7 @@ def simular_sistema_price(valor_desejado:float, num_parcelas:int, taxa_juros:flo
 
     resultado = ResultadoSimulacao(tipo='PRICE', parcelas=parcelas)
     return resultado
+
+if __name__ == '__main__':
+    result = simular_sistema_price(200.0, 0, 0.1)
+    print(result.json())

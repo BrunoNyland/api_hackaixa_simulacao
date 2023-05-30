@@ -4,3 +4,4 @@ uvicorn
 virtualenv
 typing
 pyodbc
+azure-eventhub

@@ -70,8 +70,14 @@ class Lista_Produtos(List[Produto]):
     def atualizar_periodicamente(self, intervalo_minutos:int):
         self.leitura_disponivel = False
         self.carregar_produtos_da_db()
-        print(self)
-        threading.Timer(intervalo_minutos * 60, self.atualizar_periodicamente, args=[intervalo_minutos]).start()
+        # print(self)
+        self.timer = threading.Timer(intervalo_minutos * 60, self.atualizar_periodicamente, args=[intervalo_minutos])
+        self.timer.start()
+
+    def parar_atualizacao(self):
+        if hasattr(self, 'timer'):
+            print('Parando consultas na database...')
+            self.timer.cancel()
 
 if __name__ == '__main__':
     lista = Lista_Produtos()

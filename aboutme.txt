@@ -10,10 +10,11 @@ Tecnologias Favoritas:
 - SQL (Mysql e Sqlite)
 - Json
 - Django (estudando)
-- HTML e CSS (bбsico)
-- LUA (bбsico)
-- PHP (bбsico)
-- FreeBSD (intermediбrio)
+- HTML e CSS (básico)
+- LUA (básico)
+- PHP (básico)
+- FreeBSD (intermediário)
+- Git e GitHub
 
 Projetos relevantes nos quais participei:
 Já administrei (pelo menos 6) servidores privados de metin2 (que é um jogo MORPG) onde administrava e dava manutenção 

@@ -12,6 +12,18 @@ Inicie o ambiente virtual com o comando & ./venv/Scripts/Activate.ps1
 Instale as dependecias: pip install - r requirements.txt
 Inicie o servidor com o comando: python main.py
 
+Como utilizar no Linux (Ubuntu):
+deverá instalar o driver da microsoft odbc: https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=ubuntu18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline
+apt-get update
+apt-get install unixodbc-dev
+apt-get install g++
+apt-get install python
+apt-get install python-pip
+apt-get install python-dev
+pip install -r requirements.txt
+python3 main.py (dentro da pasta do app)
+
+
 Após iniciar o servidor, a API pode ser testada de duas formas:
 1 - No navegador acessoando o endereço: http://localhost:8000 na documentação poderá usar a opção tryout e enviar requisicoões diretamente pelo site
 2 - Rodando o arquivos teste.py através do comando 'python teste.py', irá gerar uma lista randomica de 200 solicitações e irá devolver o tempo para finalizar as requisições
